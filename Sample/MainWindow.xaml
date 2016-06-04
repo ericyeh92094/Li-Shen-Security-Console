@@ -1,0 +1,24 @@
+﻿<Window x:Class="SecurityConsole.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CameraWindow" Height="350" Width="525" Loaded="Window_Loaded">
+    <Grid Name="grid_main">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Content="Host" />
+            <TextBox Name="tb_host" Width="100" Text="192.168.1.234" />
+            <Label Content="Port" />
+            <TextBox Name="tb_port" Width="40" Text="8888" />
+            <Label Content="CH" />
+            <TextBox Name="tb_ch" Width="30" Text="00" />
+            <Button Name="but_play" Content="play" Click="Button_Click"/>
+            <Button Name="but_stop" Content="stop" Click="Button_Click"/>
+            <Button Name="but_playback" Content="playback" Click="Playback_Click"/>
+            <Button Name="but_snapshot" Content="SnapShot" Click="Snapshot_Click"/>
+        </StackPanel>
+        <Canvas Name="cv_video" Grid.Row="1" />
+    </Grid>
+</Window>
