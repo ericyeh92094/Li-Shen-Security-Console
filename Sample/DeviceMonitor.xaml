@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SecurityConsole"
         mc:Ignorable="d"
-        Title="DeviceMonitor" Height="489.249" Width="665.112">
+        Title="DeviceMonitor" Height="489.249" Width="665.112" Loaded="Window_Loaded">
     <Grid Margin="0,0,2,3">
-        <Image x:Name="Image1_png" Margin="0,17,0,90" Source="Image1.png" Stretch="Fill" HorizontalAlignment="Left" Width="625"/>
+        <Image x:Name="Image1_png" Margin="10,22,0,85" Source="Image1.png" Stretch="Fill" HorizontalAlignment="Left" Width="625"/>
         <ListBox x:Name="listBox" Margin="73,389,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
         <Button x:Name="PanicButton1" Margin="474,167,161,262" Width="20" Height="26" Click="PanicButton_Click">
             <StackPanel Orientation="Horizontal" Margin="0">
@@ -20,7 +20,7 @@
             </StackPanel>
         </Button>
 
-        <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="14,379,0,0" VerticalAlignment="Top" Width="54" Height="54" Click="btnSend_Click" />
+        <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="54" Height="54" Click="btnSend_Click" />
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="73,361,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="572"/>
 
     </Grid>

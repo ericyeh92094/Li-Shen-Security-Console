@@ -25,10 +25,11 @@ namespace SecurityConsole
         private string[] d2cPartitions;
         private int partnum = 0;
 
-        static string[] deviceId;
-        static DeviceClient[] deviceClients;
+        static List<string> deviceId;
+        static List<string> deviceKeys;
+        static List<DeviceClient> deviceClients;
         static string iotHubUri = "lishansecurity.azure-devices.net";
-        static string deviceKey = "W2rTkHcLmSKqcK79WtGlrvpS4HykaIAW+yxOGb1qpMA=";
+        static string devicekey = "W2rTkHcLmSKqcK79WtGlrvpS4HykaIAW+yxOGb1qpMA=";
 
         public IoTHubCommunicator()
         {
@@ -44,10 +45,11 @@ namespace SecurityConsole
                 i++;
             }
             partnum = i;
-            EnumDevices();
+
+            registryManager = RegistryManager.CreateFromConnectionString(connectionString);
         }
 
-        private async Task EnumDevices()
+        public async Task EnumDevices()
         {
             IEnumerable<Device> devices;
             int i = 0;
@@ -56,10 +58,17 @@ namespace SecurityConsole
             {
                 devices = await registryManager.GetDevicesAsync(10);
 
+                deviceId = new List<string>();
+                deviceKeys = new List<string>();
+                deviceClients = new List<DeviceClient>();
+
                 foreach (Device dev in devices)
                 {
-                    deviceId[i] = dev.Id;
-                    deviceClients[i] = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(dev.Id, deviceKey));
+                    deviceId.Add(dev.Id);
+                    string key = dev.Authentication.SymmetricKey.PrimaryKey;
+                    deviceKeys.Add(key);
+
+                    deviceClients.Add(DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(dev.Id, key)));
                 }
             }
             catch (DeviceNotFoundException)

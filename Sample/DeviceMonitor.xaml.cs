@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Resources;
 
 namespace SecurityConsole
 {
@@ -30,6 +31,12 @@ namespace SecurityConsole
 
         }
 
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ((App)Application.Current).httpServer.MessageReceivedEvent += PanicButton1_PingReceivedEvent;
+            await _communicator.EnumDevices();
+        }
+
         private void PanicButton_Click(object sender, RoutedEventArgs e)
         {
             var popup = new MainWindow();
@@ -44,9 +51,28 @@ namespace SecurityConsole
         }
         private async void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            await _communicator.SendDataToAzure(textBox.Text);
+            await _communicator.SendDataToAzure(0, textBox.Text);
         }
 
+        public void PanicButton1_PingReceivedEvent(object sender, string e)
+        {
+            Console.WriteLine("Alarm Received");
+            change_button();
+
+        }
+
+        public void change_button()
+        { 
+            
+            Uri resourceUri = new Uri("Resources/reddrop.png", UriKind.Relative);
+            StreamResourceInfo streamInfo = Application.GetResourceStream(resourceUri);
+
+            BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
+            var brush = new ImageBrush();
+            brush.ImageSource = temp;
+
+            PanicButton1.Background = brush;
+        }
 
     }
 }

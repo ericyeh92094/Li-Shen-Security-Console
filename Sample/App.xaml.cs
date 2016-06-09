@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Threading;
 
 namespace SecurityConsole
 {
@@ -12,5 +13,12 @@ namespace SecurityConsole
     /// </summary>
     public partial class App : Application
     {
+        public MyHttpServer httpServer;
+        public App()
+        {
+            httpServer = new MyHttpServer(8080);
+            Thread thread = new Thread(new ThreadStart(httpServer.listen));
+            thread.Start();
+        }
     }
 }
