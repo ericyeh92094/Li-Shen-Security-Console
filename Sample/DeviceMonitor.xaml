@@ -5,23 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SecurityConsole"
         mc:Ignorable="d"
-        Title="DeviceMonitor" Height="489.249" Width="665.112" Loaded="Window_Loaded">
-    <Grid Margin="0,0,2,3">
-        <Image x:Name="Image1_png" Margin="10,22,0,85" Source="Image1.png" Stretch="Fill" HorizontalAlignment="Left" Width="625"/>
-        <ListBox x:Name="listBox" Margin="73,389,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-        <Button x:Name="PanicButton1" Margin="474,167,161,262" Width="20" Height="26" Click="PanicButton_Click">
-            <StackPanel Orientation="Horizontal" Margin="0">
-                <Image Source="Resources/bluedrop.png" Width="20" Height="26" Margin="0,0,0,0"/>
-            </StackPanel>
-        </Button>
-        <Button x:Name="PanicButton2" Margin="178,167,457,262" Width="20" Height="26" Click="PanicButton_Click">
-            <StackPanel Orientation="Horizontal" Margin="0">
-                <Image Source="Resources/bluedrop.png" Width="20" Height="26" Margin="0,0,0,0"/>
-            </StackPanel>
-        </Button>
+        Title="DeviceMonitor" Height="800" Width="1050" Loaded="Window_Loaded">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="239*" />
+            <ColumnDefinition Width="454*" />
+            <ColumnDefinition Width="347*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="54" Height="54" Click="btnSend_Click" />
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="73,361,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="572"/>
+        <Image Grid.Column="2" Grid.Row="0" x:Name="Image1_png" Margin="0,0,0,0" Source="Image1.png" Stretch="Uniform"  HorizontalAlignment="Left" Grid.RowSpan="2"/>
+        <Button Grid.Column="0" Grid.Row="0" x:Name="PanicButton1" Margin="0,0,0,0" Click="PanicButton_Click">
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Image Source="Resources/bluebutton.png" Stretch="Uniform" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="0" Grid.Row="1" x:Name="PanicButton2" Margin="0,0,0,0" Click="PanicButton_Click">
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Image Source="Resources/bluebutton.png" Stretch="Uniform" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="0" Grid.Row="2" x:Name="PanicButton3" Margin="0,0,0,0" Click="PanicButton_Click">
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Image Source="Resources/bluebutton.png" Stretch="Uniform" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="0" Grid.Row="3" x:Name="PanicButton4" Margin="0,0,0,0" Click="PanicButton_Click">
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Image Source="Resources/bluebutton.png" Stretch="Uniform" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <ListBox Grid.Column="2" Grid.Row="2" x:Name="listBox" Margin="10,66,73,25" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Grid.RowSpan="2" />
+        <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="283,0,0,0" VerticalAlignment="Top" Width="54" Height="49" Click="btnSend_Click" Grid.Row="2" Grid.Column="2" />
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="43" Margin="10,6,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="259" Grid.Row="2" Grid.Column="2"/>
 
     </Grid>
 </Window>
