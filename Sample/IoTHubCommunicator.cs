@@ -68,7 +68,8 @@ namespace SecurityConsole
                     string key = dev.Authentication.SymmetricKey.PrimaryKey;
                     deviceKeys.Add(key);
 
-                    deviceClients.Add(DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(dev.Id, key)));
+                    //deviceClients.Add(DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(dev.Id, key)));
+                    deviceClients.Add(DeviceClient.CreateFromConnectionString(_iotHubConnectionString, dev.Id));
                 }
             }
             catch (DeviceNotFoundException)
