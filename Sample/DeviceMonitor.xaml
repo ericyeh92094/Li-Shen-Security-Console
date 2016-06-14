@@ -5,12 +5,79 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SecurityConsole"
         mc:Ignorable="d"
-        Title="DeviceMonitor" Height="900" Width="1050" Loaded="Window_Loaded">
+        Title="DeviceMonitor" Height="800" Width="1050" Loaded="Window_Loaded" Background="#FF525252" BorderBrush="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+
+    <Window.Resources>
+        <PathGeometry x:Key="Path1" Figures="M 0,50 L 200,50"/>
+        <PathGeometry x:Key="Path2" Figures="M 0.499939,48.6606C 2.42746,45.1911 5.8242,38.2785 6.31174,38.4952C 8.01431,39.2519 8.79037,48.8331 10.0613,50.9936C 10.9917,52.5753 12.5007,54.7948 14.3107,54.4932C 14.79,54.4133 24.8544,43.5739 25.3094,43.7445C 25.8327,43.9408 27.7953,47.7509 28.8089,47.2441C 30.3381,46.4795 34.1497,41.6631 34.5582,41.7448C 34.8951,41.8122 38.1494,47.8282 39.8075,47.994C 43.0506,48.3183 45.0782,44.0683 48.0565,42.7447C 51.3824,41.2665 55.0088,44.9259 58.5552,45.7443C 61.3347,46.3857 68.9706,45.4943 68.9706,45.4943L 76.1363,26.1634L 81.3024,78.6568L 88.6348,0.499934L 94.634,64.3253C 94.634,64.3253 105.251,33.0223 105.549,33.2458C 106.146,33.693 112.871,46.313 117.298,46.9941C 121.597,47.6555 125.611,44.3467 129.546,42.4947C 131.287,41.6756 133.221,40.1366 135.046,40.7449C 137.558,41.5823 139.66,43.731 142.295,43.9945C 148.264,44.5914 154.41,42.8179 160.292,43.9945C 162.387,44.4133 164.163,46.4216 166.292,46.2442C 169.979,45.9369 173.59,44.7444 177.29,44.7444C 180.217,44.7444 183.2,46.2042 186.039,45.4943 "
+        />
+
+        <!-- PresentationOptions:Freeze="True" -->
+
+        <Storyboard x:Key="SB">
+            <MatrixAnimationUsingPath
+            Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
+            BeginTime="0:0:0"
+            Duration="0:0:5" DoesRotateWithTangent="True"
+            RepeatBehavior="Forever" PathGeometry="{StaticResource Path2}" >
+            </MatrixAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="SB2">
+            <MatrixAnimationUsingPath
+            Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
+            BeginTime="0:0:0.05"
+            Duration="0:0:5" DoesRotateWithTangent="True"
+            RepeatBehavior="Forever" PathGeometry="{StaticResource Path2}" >
+            </MatrixAnimationUsingPath>
+        </Storyboard>
+        <Storyboard x:Key="SB3">
+            <MatrixAnimationUsingPath
+            Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
+            BeginTime="0:0:0.1"
+            Duration="0:0:5" DoesRotateWithTangent="True"
+            RepeatBehavior="Forever" PathGeometry="{StaticResource Path2}" >
+            </MatrixAnimationUsingPath>
+        </Storyboard>
+        <Storyboard x:Key="SB4">
+            <MatrixAnimationUsingPath
+            Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
+            BeginTime="0:0:0.15"
+            Duration="0:0:5" DoesRotateWithTangent="True"
+            RepeatBehavior="Forever" PathGeometry="{StaticResource Path2}" >
+            </MatrixAnimationUsingPath>
+        </Storyboard>
+
+        <ImageBrush x:Key="ButtonImage" ImageSource="Resources/bluebutton.png"></ImageBrush>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonImage}"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" OpacityMask="{DynamicResource {x:Static SystemColors.ActiveCaptionTextBrushKey}}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                    Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Blue" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <!-- If we don't tell the background to change on hover, it will remain the same -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
     <Grid Name="grid_main" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*" />
-            <ColumnDefinition Width="454*" />
-            <ColumnDefinition Width="347*" />
+            <ColumnDefinition Width="400*" />
+            <ColumnDefinition Width="200*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -19,7 +86,274 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Image Grid.Column="2" Grid.Row="0" x:Name="Image1_png" Margin="0,0,0,0" Source="Image1.png" Stretch="Uniform"  HorizontalAlignment="Left" Grid.RowSpan="2"/>
+        <Canvas Name="Canvas1" Grid.Column="2" Grid.Row="0" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+            <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
+            <Ellipse Fill="White" Width="10" Height="6" >
+                    <Ellipse.RenderTransform>
+                        <MatrixTransform>
+                            <MatrixTransform.Matrix >
+                                <Matrix />
+                            </MatrixTransform.Matrix>
+                        </MatrixTransform>
+                    </Ellipse.RenderTransform>
+                    <Ellipse.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource SB}" />
+                        </EventTrigger>
+                    </Ellipse.Triggers>
+                </Ellipse>
+            <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+
+        <Canvas Name="Canvas2" Grid.Column="2" Grid.Row="1" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+            <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
+            <Ellipse Fill="White" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+
+        <Canvas Name="Canvas3" Grid.Column="2" Grid.Row="2" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+            <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
+            <Ellipse Fill="White" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+        
+        <Canvas Name="Canvas4" Grid.Column="2" Grid.Row="3" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+            <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
+            <Ellipse Fill="White" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+
+            <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
+                <Ellipse.RenderTransform>
+                    <MatrixTransform>
+                        <MatrixTransform.Matrix >
+                            <Matrix />
+                        </MatrixTransform.Matrix>
+                    </MatrixTransform>
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+        <!--Image Grid.Column="2" Grid.Row="0" x:Name="Image1_png" Margin="0,0,0,0" Source="Image1.png" Stretch="Uniform"  HorizontalAlignment="Left" Grid.RowSpan="2"/-->
         <Button Grid.Column="0" Grid.Row="0" x:Name="PanicButton1" Margin="0,0,0,0" Click="PanicButton_Click">
             <StackPanel Orientation="Horizontal" Margin="0">
                 <Image Stretch="Uniform" Margin="0,0,0,0"/>
@@ -40,9 +374,7 @@
                 <Image Stretch="Uniform" Margin="0,0,0,0"/>
             </StackPanel>
         </Button>
-        <ListBox Grid.Column="2" Grid.Row="2" x:Name="listBox" Margin="10,66,73,25" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Grid.RowSpan="2" />
-        <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="283,0,0,0" VerticalAlignment="Top" Width="54" Height="49" Click="btnSend_Click" Grid.Row="2" Grid.Column="2" />
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="43" Margin="10,6,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="259" Grid.Row="2" Grid.Column="2"/>
 
     </Grid>
+ 
 </Window>
