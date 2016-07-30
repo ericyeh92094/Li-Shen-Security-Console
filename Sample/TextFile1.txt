@@ -48,3 +48,14 @@
          <ListBox Grid.Column="2" Grid.Row="2" x:Name="listBox" Margin="10,66,73,25" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Grid.RowSpan="2" />
         <Button x:Name="Send_button" Content="Send" HorizontalAlignment="Left" Margin="283,0,0,0" VerticalAlignment="Top" Width="54" Height="49" Click="btnSend_Click" Grid.Row="2" Grid.Column="2" />
         <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="43" Margin="10,6,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="259" Grid.Row="2" Grid.Column="2"/>
+
+		                    <Ellipse.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource SB}" />
+                        </EventTrigger>
+                    </Ellipse.Triggers>
+
+					            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />

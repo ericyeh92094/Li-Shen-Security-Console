@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Resources;
+using System.Windows.Media.Animation;
+using Twilio;
 
 namespace SecurityConsole
 {
@@ -20,7 +22,9 @@ namespace SecurityConsole
     /// </summary>
     public partial class DeviceMonitor : Window
     {
-        private IoTHubCommunicator _communicator;
+        //private IoTHubCommunicator _communicator;
+        private SerialComm _serial_comm;
+
         private AplusVideoC01.wpf_Monitor m_obj;
         private List<AplusVideoC01.wpf_Monitor> m_objList;
         private List<System.Windows.Forms.Integration.WindowsFormsHost> hostList;
@@ -31,10 +35,14 @@ namespace SecurityConsole
         public DeviceMonitor()
         {
             InitializeComponent();
-           
+
+            /*
             _communicator = new IoTHubCommunicator();
             _communicator.MessageReceivedEvent += _communicator_MessageReceivedEvent;
-            _communicator.ReceiveDataFromAzure();
+            */
+
+            _serial_comm = new SerialComm();
+            _serial_comm.MessageReceivedEvent += _communicator_MessageReceivedEvent;
 
             m_objList = new List<AplusVideoC01.wpf_Monitor>();
             hostList = new List<System.Windows.Forms.Integration.WindowsFormsHost>();
@@ -46,12 +54,14 @@ namespace SecurityConsole
         }
         private void InitButtonImage()
         {
-            Uri resourceUri = new Uri("Resources/bluebutton.png", UriKind.Relative);
-            StreamResourceInfo streamInfo = Application.GetResourceStream(resourceUri);
+            Uri resourceUri = new Uri("Resources/green_button.png", UriKind.Relative);
+            StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
 
             BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
             var brush = new ImageBrush();
             brush.ImageSource = temp;
+            brush.Stretch = Stretch.None;
+
             PanicButton1.Background = brush;
             PanicButton2.Background = brush;
             PanicButton3.Background = brush;
@@ -66,12 +76,19 @@ namespace SecurityConsole
                 {
                     System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
                     m_obj = new AplusVideoC01.wpf_Monitor();
+                    host.Width = (int) grid_main.ColumnDefinitions[1].ActualWidth;
+                    host.Height = (int)grid_main.RowDefinitions[0].ActualHeight;
                     host.Child = m_obj;
                     host.SetValue(Grid.RowProperty, i);
                     host.SetValue(Grid.ColumnProperty, 1);
                     grid_main.Children.Add(host);
                     m_obj.Device_Login(host_ip, host_port, "", "");
-                    m_obj.Device_RealPlay(i, 0, 0);
+
+                    int id = i;
+                    if (i == 0) id = 1;
+                    else if (i == 1) id = 0;
+
+                    m_obj.Device_RealPlay(id, 0, 0);
                     m_objList.Add(m_obj);
                     hostList.Add(host);
                 }
@@ -97,11 +114,16 @@ namespace SecurityConsole
         {
             InitButtonImage();
             InitVideoFeeds();
+
+            /*
             //InitECG();
 
-            ((App)Application.Current).httpServer.MessageReceivedEvent += PanicButton1_PingReceivedEvent;
+            //((App)System.Windows.Application.Current).httpServer.MessageReceivedEvent += PanicButton1_PingReceivedEvent;
 
-            await _communicator.EnumDevices();
+            //await _communicator.EnumDevices();
+            //_communicator.ReceiveDataFromAzure();
+            //_communicator.ReceiveDataFromDevice();
+            */
         }
 
         private void PanicButton_Click(object sender, RoutedEventArgs e)
@@ -110,12 +132,13 @@ namespace SecurityConsole
             var popup = new MainWindow();
             popup.Show();
             */
-            Uri resourceUri = new Uri("Resources/bluebutton.png", UriKind.Relative);
-            StreamResourceInfo streamInfo = Application.GetResourceStream(resourceUri);
+            Uri resourceUri = new Uri("Resources/green_button.png", UriKind.Relative);
+            StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
 
             BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
             var brush = new ImageBrush();
             brush.ImageSource = temp;
+            brush.Stretch = Stretch.None;
 
             if (sender == PanicButton1)
             {
@@ -139,7 +162,17 @@ namespace SecurityConsole
             //update UI
             //listBox.Items.Add(e);
             //start listening again
-            _communicator.ReceiveDataFromAzure();
+
+            if (e.StartsWith("SOS"))
+            {
+                if (!Alerted[0])
+                {
+                    Console.WriteLine("Alarm Received {0}", e);
+                    change_button(e);
+                    //Fire_SMS(e);
+                }
+            }
+           // _communicator.ReceiveDataFromAzure();
         }
         /*
         private async void btnSend_Click(object sender, RoutedEventArgs e)
@@ -148,25 +181,58 @@ namespace SecurityConsole
         }
         */
 
+        public void Fire_SMS(string e)
+        {
+            char[] delimiterChar = { '=' };
+            string[] str = e.Split(delimiterChar);
+            int id = Int32.Parse(str[1]);
+
+            string AccountSid = "ACb8ff77dff70eb33393322f9be8ac4154";
+            string AuthToken = "6d3d9d39eaf3d87d1d60fcd4d8f963a1";
+            var twilio = new TwilioRestClient(AccountSid, AuthToken);
+
+            var message = twilio.SendMessage(
+                "+16315935729", "+886935126091",
+                "緊急按鈕" + str[1] + " 啟動於 " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " https://www.gotomypc.com/sc/947541C58ED9BD1C4737F155537B12D9"
+            );
+
+            Console.WriteLine(message.Sid);
+
+
+        }
         public void PanicButton1_PingReceivedEvent(object sender, string e)
         {
             Console.WriteLine("Alarm Received {0}", e);
             change_button(e);
+            Fire_SMS(e);
 
+        }
+
+        private void Ellipse_Loaded(object sender, RoutedEventArgs e)
+        {
+            Storyboard s = (Storyboard)this.Resources["SB0"];
+            if (sender == e1_1)
+                Storyboard.SetTargetName(s, "e1_1");
+            else if (sender == e3_1)
+                Storyboard.SetTargetName(s, "e3_1");
+            else if (sender == e4_1)
+                Storyboard.SetTargetName(s, "e4_1");
+            s.Begin();
         }
 
         public void change_button(string e)
         {             
-            Uri resourceUri = new Uri("Resources/redbutton.png", UriKind.Relative);
-            StreamResourceInfo streamInfo = Application.GetResourceStream(resourceUri);
+            Uri resourceUri = new Uri("Resources/red_button.png", UriKind.Relative);
+            StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
 
             BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
             var brush = new ImageBrush();
             brush.ImageSource = temp;
+            brush.Stretch = Stretch.None;
 
-            char[] delimiterChar = { '='};
-            string[] str = e.Split(delimiterChar);
-            int id = Int32.Parse(str[1]);
+            //char[] delimiterChar = { 'S'};
+            //string[] str = e.Split(delimiterChar);
+            int id = Int32.Parse(e.Substring(3));
 
             switch (id)
             {

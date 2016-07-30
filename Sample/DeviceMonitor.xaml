@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SecurityConsole"
         mc:Ignorable="d"
-        Title="DeviceMonitor" Height="800" Width="1050" Loaded="Window_Loaded" Background="#FF525252" BorderBrush="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+        Title="DeviceMonitor" Height="1000" Width="1050" Loaded="Window_Loaded" Background="White" BorderBrush="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
 
     <Window.Resources>
         <PathGeometry x:Key="Path1" Figures="M 0,50 L 200,50"/>
@@ -13,7 +13,15 @@
         />
 
         <!-- PresentationOptions:Freeze="True" -->
-
+        <Storyboard x:Key="SB0">
+            <MatrixAnimationUsingPath
+            Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
+            BeginTime="0:0:0"
+            Duration="0:0:5" DoesRotateWithTangent="True"
+            RepeatBehavior="Forever" PathGeometry="{StaticResource Path1}" >
+            </MatrixAnimationUsingPath>
+        </Storyboard>
+        
         <Storyboard x:Key="SB">
             <MatrixAnimationUsingPath
             Storyboard.TargetProperty="(UIElement.RenderTransform).Matrix"
@@ -48,7 +56,7 @@
             </MatrixAnimationUsingPath>
         </Storyboard>
 
-        <ImageBrush x:Key="ButtonImage" ImageSource="Resources/bluebutton.png"></ImageBrush>
+        <ImageBrush x:Key="ButtonImage" ImageSource="Resources/green_button.png"></ImageBrush>
         <Style TargetType="Button">
             <Setter Property="Background" Value="{StaticResource ButtonImage}"></Setter>
             <Setter Property="Template">
@@ -76,7 +84,7 @@
     <Grid Name="grid_main" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200*" />
-            <ColumnDefinition Width="400*" />
+            <ColumnDefinition Width="350*" />
             <ColumnDefinition Width="200*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -86,15 +94,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Canvas Name="Canvas1" Grid.Column="2" Grid.Row="0" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+        <Canvas Name="Canvas1" Grid.Column="0" Grid.Row="0" Width="200" Height="100" Margin ="15,20,0,0" Background="DimGray" >
             <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="2" X2="0" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="200" Y1="2" X2="200" Y2="98" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
-            <Ellipse Fill="White" Width="10" Height="6" >
+            <Ellipse x:Name="e1_1" Fill="White" Width="10" Height="6" Loaded="Ellipse_Loaded" >
                     <Ellipse.RenderTransform>
                         <MatrixTransform>
                             <MatrixTransform.Matrix >
@@ -102,11 +108,7 @@
                             </MatrixTransform.Matrix>
                         </MatrixTransform>
                     </Ellipse.RenderTransform>
-                    <Ellipse.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard Storyboard="{StaticResource SB}" />
-                        </EventTrigger>
-                    </Ellipse.Triggers>
+
                 </Ellipse>
             <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -116,11 +118,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+ 
             </Ellipse>
             <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -130,11 +128,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
 
             <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
@@ -145,21 +139,15 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+ 
             </Ellipse>
         </Canvas>
 
-        <Canvas Name="Canvas2" Grid.Column="2" Grid.Row="1" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+        <Canvas Name="Canvas2" Grid.Column="2" Grid.Row="0" Width="200" Height="100" Margin ="15,20,0,0" Background="DimGray">
             <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="2" X2="0" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="200" Y1="2" X2="200" Y2="98" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
             <Ellipse Fill="White" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -220,15 +208,13 @@
             </Ellipse>
         </Canvas>
 
-        <Canvas Name="Canvas3" Grid.Column="2" Grid.Row="2" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+        <Canvas Name="Canvas3" Grid.Column="0" Grid.Row="3" Width="200" Height="100" Margin ="15,20,0,0" Background="DimGray">
             <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="2" X2="0" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="200" Y1="2" X2="200" Y2="98" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
-            <Ellipse Fill="White" Width="10" Height="6" >
+            <Ellipse x:Name="e3_1" Fill="White" Width="10" Height="6" Loaded="Ellipse_Loaded">
                 <Ellipse.RenderTransform>
                     <MatrixTransform>
                         <MatrixTransform.Matrix >
@@ -236,11 +222,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
             <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -250,11 +232,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+ 
             </Ellipse>
             <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -264,11 +242,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
 
             <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
@@ -279,23 +253,17 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
         </Canvas>
-        
-        <Canvas Name="Canvas4" Grid.Column="2" Grid.Row="3" Width="200" Height="100" Margin ="15,20,0,0" Background="DarkGray">
+
+        <Canvas Name="Canvas4" Grid.Column="2" Grid.Row="3" Width="200" Height="100" Margin ="15,20,0,0" Background="DimGray">
             <Line Stroke="White" X1="0" Y1="2" X2="200" Y2="2" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="98" X2="200" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="40" Y1="2" X2="40" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="80" Y1="2" X2="80" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="120" Y1="2" X2="120" Y2="98" StrokeThickness='1' />
-            <Line Stroke="White" X1="160" Y1="2" X2="160" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="0" Y1="2" X2="0" Y2="98" StrokeThickness='1' />
+            <Line Stroke="White" X1="200" Y1="2" X2="200" Y2="98" StrokeThickness='1' />
             <Line Stroke="White" X1="0" Y1="50" X2="200" Y2="50" StrokeThickness='1' />
-            <Ellipse Fill="White" Width="10" Height="6" >
+            <Ellipse x:Name="e4_1" Fill="White" Width="10" Height="6" Loaded="Ellipse_Loaded">
                 <Ellipse.RenderTransform>
                     <MatrixTransform>
                         <MatrixTransform.Matrix >
@@ -303,11 +271,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
             <Ellipse Fill="White" Opacity=".6" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -317,11 +281,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB2}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+ 
             </Ellipse>
             <Ellipse Fill="White" Opacity=".4" Width="10" Height="6" >
                 <Ellipse.RenderTransform>
@@ -331,11 +291,7 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB3}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+ 
             </Ellipse>
 
             <Ellipse Fill="White" Opacity=".2" Width="10" Height="6" >
@@ -346,22 +302,18 @@
                         </MatrixTransform.Matrix>
                     </MatrixTransform>
                 </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource SB4}" />
-                    </EventTrigger>
-                </Ellipse.Triggers>
+
             </Ellipse>
         </Canvas>
         <!--Image Grid.Column="2" Grid.Row="0" x:Name="Image1_png" Margin="0,0,0,0" Source="Image1.png" Stretch="Uniform"  HorizontalAlignment="Left" Grid.RowSpan="2"/-->
-        <Button Grid.Column="0" Grid.Row="0" x:Name="PanicButton1" Margin="0,0,0,0" Click="PanicButton_Click">
+        <Button Grid.Column="2" Grid.Row="1" x:Name="PanicButton1" Margin="0,0,0,0" Click="PanicButton_Click">
             <StackPanel Orientation="Horizontal" Margin="0">
                 <Image Stretch="Uniform" Margin="0,0,0,0"/>
             </StackPanel>
         </Button>
         <Button Grid.Column="0" Grid.Row="1" x:Name="PanicButton2" Margin="0,0,0,0" Click="PanicButton_Click">
             <StackPanel Orientation="Horizontal" Margin="0">
-                <Image Stretch="Uniform" Margin="0,0,0,0"/>
+                <Image Stretch="None"  Margin="0,0,0,0"/>
             </StackPanel>
         </Button>
         <Button Grid.Column="0" Grid.Row="2" x:Name="PanicButton3" Margin="0,0,0,0" Click="PanicButton_Click">
@@ -369,7 +321,7 @@
                 <Image Stretch="Uniform" Margin="0,0,0,0"/>
             </StackPanel>
         </Button>
-        <Button Grid.Column="0" Grid.Row="3" x:Name="PanicButton4" Margin="0,0,0,0" Click="PanicButton_Click">
+        <Button Grid.Column="2" Grid.Row="2" x:Name="PanicButton4" Margin="0,0,0,0" Click="PanicButton_Click">
             <StackPanel Orientation="Horizontal" Margin="0">
                 <Image Stretch="Uniform" Margin="0,0,0,0"/>
             </StackPanel>

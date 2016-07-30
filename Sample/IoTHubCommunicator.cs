@@ -14,15 +14,14 @@ namespace SecurityConsole
 {
     class IoTHubCommunicator
     {
-        private RegistryManager registryManager;
-        public event EventHandler<string> MessageReceivedEvent;
-        private string _iotHubConnectionString =
-            "HostName=lishansecurity.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=PuzeLHuLPxH7f48bJppTnVmK7KDLdpp4mIoe/X4+DYg=";
-        private string connectionString = "HostName=lishansecurity.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=PuzeLHuLPxH7f48bJppTnVmK7KDLdpp4mIoe/X4+DYg=";
-        private string iotHubD2cEndpoint = "messages/events";
-        private EventHubClient eventHubClient;
-        private EventHubReceiver[] eventHubReceiver;
-        private string[] d2cPartitions;
+        private  RegistryManager registryManager;
+        public  event EventHandler<string> MessageReceivedEvent;
+        private  string _iotHubConnectionString = "HostName=lishansecurity.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=PuzeLHuLPxH7f48bJppTnVmK7KDLdpp4mIoe/X4+DYg=";
+        private  string connectionString = "HostName=lishansecurity.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=PuzeLHuLPxH7f48bJppTnVmK7KDLdpp4mIoe/X4+DYg=";
+        private  string iotHubD2cEndpoint = "messages/events";
+        private  EventHubClient eventHubClient;
+        private  EventHubReceiver[] eventHubReceiver;
+        private  string[] d2cPartitions;
         private int partnum = 0;
 
         static List<string> deviceId;
@@ -76,40 +75,39 @@ namespace SecurityConsole
             { }        
         }
 
-        public async Task SendDataToAzure(int numId, string message)
+        public static async Task SendDataToAzure(int numId, string message)
         {
             DeviceClient deviceClient = deviceClients[numId]; // DeviceClient.CreateFromConnectionString(_iotHubConnectionString);
             var msg = new Microsoft.Azure.Devices.Client.Message(Encoding.UTF8.GetBytes(message));
             await deviceClient.SendEventAsync(msg);
         }
 
+        public async Task ReceiveDataFromDevice()
+        {
+            while (true)
+            {
+                DeviceClient deviceClient = deviceClients[0]; // DeviceClient.CreateFromConnectionString(_iotHubConnectionString);
+                Microsoft.Azure.Devices.Client.Message receivedMessage = await deviceClient.ReceiveAsync();
+                if (receivedMessage == null) continue;
+
+                string opStr = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                this.OnMessageReceivedEvent(opStr);
+            }
+        }
         public async Task ReceiveDataFromAzure()
         {
-            /*
-            DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(_iotHubConnectionString);
-            Message receivedMessage;
-            string messageData;
             while (true)
             {
-                receivedMessage = await deviceClient.ReceiveAsync();
-                if (receivedMessage != null)
+                for (int i = 0; i < 4; i++)
                 {
-                    messageData = Encoding.ASCII.GetString(receivedMessage.GetBytes());
-                    this.OnMessageReceivedEvent(messageData);
-                    await deviceClient.CompleteAsync(receivedMessage);
-                }
-            }
-            */
-            while (true)
-            {
-                for (int i = 0; i < partnum; i++)
-                {
-                    EventData eventData = await eventHubReceiver[i].ReceiveAsync();
+                    EventData eventData = await eventHubReceiver[i].ReceiveAsync(TimeSpan.FromSeconds(1));
+                    
                     if (eventData == null) continue;
                     string data = Encoding.UTF8.GetString(eventData.GetBytes());
                     this.OnMessageReceivedEvent(data);
                 }
             }
+
         }
 
         protected virtual void OnMessageReceivedEvent(string s)
