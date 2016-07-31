@@ -99,19 +99,20 @@ namespace SecurityConsole
                 try
                 {
                     byte[] buffer = new byte[100];
+                    int b = _serialPort.ReadByte();
 
-                    //There is no accurate method for checking how many bytes are read 
-                    //unless you check the return from the Read method 
-                    int bytesRead = _serialPort.Read(buffer, 0, buffer.Length);
+                    if ((b >= '1' && b <= '4') || b == 'O') // started with '1' - '4' or 'O'
+                    {
+                        buffer[0] = (byte)b;
+                        for (int i = 1; i < 20; i++)
+                            buffer[i] = (byte)_serialPort.ReadByte();
 
-                    //For the example assume the data we are received is ASCII data. 
-                    string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                    message.TrimEnd(); // remove all blanks
-                 
-                    //this.OnMessageReceivedEvent(message);
+                        string message = Encoding.ASCII.GetString(buffer, 0, 20);
+                        message.TrimEnd(' '); // remove all blanks
 
-                    if (message != null)
                         Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => MessageReceivedEvent(this, message)));
+                    }
+                    //this.OnMessageReceivedEvent(message);
                 }
                 catch (TimeoutException) { }
             }

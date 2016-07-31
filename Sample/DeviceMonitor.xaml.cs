@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Resources;
 using System.Windows.Media.Animation;
+using System.Media;
 using Twilio;
 
 namespace SecurityConsole
@@ -30,6 +31,10 @@ namespace SecurityConsole
         private List<System.Windows.Forms.Integration.WindowsFormsHost> hostList;
         static string host_ip = "192.168.1.234", host_port = "8888";
         private Boolean [] Alerted;
+
+        private SoundPlayer ShirenPlayer = new SoundPlayer("emergency.wav");
+
+
         public Path myPath { get; set; }
 
         public DeviceMonitor()
@@ -128,34 +133,25 @@ namespace SecurityConsole
 
         private void PanicButton_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            var popup = new MainWindow();
-            popup.Show();
-            */
-            Uri resourceUri = new Uri("Resources/green_button.png", UriKind.Relative);
-            StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
-
-            BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
-            var brush = new ImageBrush();
-            brush.ImageSource = temp;
-            brush.Stretch = Stretch.None;
+            int id_num = -1;
 
             if (sender == PanicButton1)
             {
-                if (Alerted[0]) { PanicButton1.Background = brush; Alerted[0] = false; }
+                id_num = 0;
             }
             if (sender == PanicButton2)
             {
-                if (Alerted[1]) { PanicButton2.Background = brush; Alerted[1] = false; }
+                id_num = 1;
             }
             if (sender == PanicButton3)
             {
-                if (Alerted[2]) { PanicButton3.Background = brush; Alerted[2] = false; }
+                id_num = 2;
             }
             if (sender == PanicButton4)
             {
-                if (Alerted[3]) { PanicButton4.Background = brush; Alerted[3] = false; }
+                id_num = 3;
             }
+            release_button(id_num);
         }
         private void _communicator_MessageReceivedEvent(object sender, string e)
         {
@@ -163,14 +159,31 @@ namespace SecurityConsole
             //listBox.Items.Add(e);
             //start listening again
 
-            if (e.StartsWith("SOS"))
+            if (e.IndexOf("SOS") > 0)
             {
-                if (!Alerted[0])
+                char[] delimiterChar = { '>'};
+                string[] substr = e.Split(delimiterChar);
+                int id_num = Int32.Parse(substr[0]) - 1;
+
+                if (!Alerted[id_num])
                 {
                     Console.WriteLine("Alarm Received {0}", e);
-                    change_button(e);
+                    alram_button(id_num);
                     //Fire_SMS(e);
                 }
+            }
+            else if (e.StartsWith("Off:"))
+            {
+                char[] delimiterChar = { ':' };
+                string[] substr = e.Split(delimiterChar);
+                int id_num = substr[1][0] - '1';
+
+                if (Alerted[id_num])
+                {
+                    Console.WriteLine("Alarm Released {0}", e);
+                    release_button(id_num);
+                }
+
             }
            // _communicator.ReceiveDataFromAzure();
         }
@@ -200,14 +213,7 @@ namespace SecurityConsole
 
 
         }
-        public void PanicButton1_PingReceivedEvent(object sender, string e)
-        {
-            Console.WriteLine("Alarm Received {0}", e);
-            change_button(e);
-            Fire_SMS(e);
-
-        }
-
+       
         private void Ellipse_Loaded(object sender, RoutedEventArgs e)
         {
             Storyboard s = (Storyboard)this.Resources["SB0"];
@@ -220,7 +226,36 @@ namespace SecurityConsole
             s.Begin();
         }
 
-        public void change_button(string e)
+        public void release_button(int id_num)
+        {
+            Uri resourceUri = new Uri("Resources/green_button.png", UriKind.Relative);
+            StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
+
+            BitmapFrame temp = BitmapFrame.Create(streamInfo.Stream);
+            var brush = new ImageBrush();
+            brush.ImageSource = temp;
+            brush.Stretch = Stretch.None;
+
+            if (Alerted[id_num])
+            {
+                Alerted[id_num] = false;
+                ShirenPlayer.Stop();
+            }
+
+            switch (id_num)
+            {
+                case 0:
+                    PanicButton1.Background = brush; break;
+                case 1:
+                    PanicButton2.Background = brush; break;
+                case 2:
+                    PanicButton3.Background = brush; break;
+                case 3:
+                    PanicButton4.Background = brush; break;
+            }
+        }
+
+        public void alram_button(int id_num)
         {             
             Uri resourceUri = new Uri("Resources/red_button.png", UriKind.Relative);
             StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
@@ -230,29 +265,28 @@ namespace SecurityConsole
             brush.ImageSource = temp;
             brush.Stretch = Stretch.None;
 
-            //char[] delimiterChar = { 'S'};
-            //string[] str = e.Split(delimiterChar);
-            int id = Int32.Parse(e.Substring(3));
-
-            switch (id)
+            switch (id_num)
             {
-                case 1:
+                case 0:
                     PanicButton1.Background = brush;
                     Alerted[0] = true;
                     break;
-                case 2:
+                case 1:
                     PanicButton2.Background = brush;
                     Alerted[1] = true;
                     break;
-                case 3:
+                case 2:
                     PanicButton3.Background = brush;
                     Alerted[2] = true;
                     break;
-                case 4:
+                case 3:
                     PanicButton4.Background = brush;
                     Alerted[3] = true;
                     break;
             }
+
+            ShirenPlayer.PlayLooping();
+
         }
 
     }
