@@ -15,6 +15,8 @@ using System.Windows.Resources;
 using System.Windows.Media.Animation;
 using System.Media;
 using Twilio;
+using System.IO;
+using RestSharp;
 
 namespace SecurityConsole
 {
@@ -30,12 +32,13 @@ namespace SecurityConsole
         private List<AplusVideoC01.wpf_Monitor> m_objList;
         private List<System.Windows.Forms.Integration.WindowsFormsHost> hostList;
         static string host_ip = "192.168.1.234", host_port = "8888";
+        static string alarmUrl = "http://127.0.0.1:8888";
         private Boolean [] Alerted;
 
         private SoundPlayer ShirenPlayer = new SoundPlayer("emergency.wav");
 
 
-        public Path myPath { get; set; }
+        public System.Windows.Shapes.Path myPath { get; set; }
 
         public DeviceMonitor()
         {
@@ -46,8 +49,8 @@ namespace SecurityConsole
             _communicator.MessageReceivedEvent += _communicator_MessageReceivedEvent;
             */
 
-            _serial_comm = new SerialComm();
-            _serial_comm.MessageReceivedEvent += _communicator_MessageReceivedEvent;
+            //_serial_comm = new SerialComm();
+           // _serial_comm.MessageReceivedEvent += _communicator_MessageReceivedEvent;
 
             m_objList = new List<AplusVideoC01.wpf_Monitor>();
             hostList = new List<System.Windows.Forms.Integration.WindowsFormsHost>();
@@ -151,7 +154,15 @@ namespace SecurityConsole
             {
                 id_num = 3;
             }
-            release_button(id_num);
+
+            if (Alerted[id_num])
+            {
+                release_button(id_num);
+            }
+            else
+            {
+                alarm_button(id_num);
+            }
         }
         private void _communicator_MessageReceivedEvent(object sender, string e)
         {
@@ -168,8 +179,8 @@ namespace SecurityConsole
                 if (!Alerted[id_num])
                 {
                     Console.WriteLine("Alarm Received {0}", e);
-                    alram_button(id_num);
-                    //Fire_SMS(e);
+                    alarm_button(id_num);
+                    Fire_SMS(id_num, true);
                 }
             }
             else if (e.StartsWith("Off:"))
@@ -182,38 +193,48 @@ namespace SecurityConsole
                 {
                     Console.WriteLine("Alarm Released {0}", e);
                     release_button(id_num);
+                    Fire_SMS(id_num, false);
                 }
 
             }
            // _communicator.ReceiveDataFromAzure();
         }
-        /*
-        private async void btnSend_Click(object sender, RoutedEventArgs e)
-        {
-            await _communicator.SendDataToAzure(0, textBox.Text);
-        }
-        */
 
-        public void Fire_SMS(string e)
-        {
-            char[] delimiterChar = { '=' };
-            string[] str = e.Split(delimiterChar);
-            int id = Int32.Parse(str[1]);
-
+        public void Fire_SMS(int id, bool alarmOn)
+        { 
             string AccountSid = "ACb8ff77dff70eb33393322f9be8ac4154";
             string AuthToken = "6d3d9d39eaf3d87d1d60fcd4d8f963a1";
             var twilio = new TwilioRestClient(AccountSid, AuthToken);
+            string alarmStr = "";
 
-            var message = twilio.SendMessage(
-                "+16315935729", "+886935126091",
-                "緊急按鈕" + str[1] + " 啟動於 " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " https://www.gotomypc.com/sc/947541C58ED9BD1C4737F155537B12D9"
-            );
+            if (alarmOn) alarmStr = "啟動於 ";
+            else alarmStr = "解除於 ";
 
-            Console.WriteLine(message.Sid);
+            try
+            {
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string fullName = System.IO.Path.Combine(desktopPath, "phonenum.txt");
+                using (StreamReader steamReader = new StreamReader(fullName))
+                {
+                    int counter = 0;
+                    string line;
 
+                    while ((line = steamReader.ReadLine()) != null)
+                    {
+                        var message = twilio.SendMessage( "+16315935729", line,
+                            "緊急按鈕" + id.ToString() + alarmStr + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() );
+                        Console.WriteLine(line);
+                        counter++;
+                    }
+
+                }
+            } catch (Exception)
+            {
+                Console.WriteLine("The file could not be read. No SMS will be sent.");
+            }
 
         }
-       
+
         private void Ellipse_Loaded(object sender, RoutedEventArgs e)
         {
             Storyboard s = (Storyboard)this.Resources["SB0"];
@@ -239,7 +260,8 @@ namespace SecurityConsole
             if (Alerted[id_num])
             {
                 Alerted[id_num] = false;
-                ShirenPlayer.Stop();
+                //ShirenPlayer.Stop();
+                AlarmStop();
             }
 
             switch (id_num)
@@ -255,7 +277,7 @@ namespace SecurityConsole
             }
         }
 
-        public void alram_button(int id_num)
+        public void alarm_button(int id_num)
         {             
             Uri resourceUri = new Uri("Resources/red_button.png", UriKind.Relative);
             StreamResourceInfo streamInfo = System.Windows.Application.GetResourceStream(resourceUri);
@@ -285,9 +307,27 @@ namespace SecurityConsole
                     break;
             }
 
-            ShirenPlayer.PlayLooping();
+            //ShirenPlayer.PlayLooping();
+            AlarmOut();
 
         }
 
+        private static void AlarmOut()
+        {
+            var client = new RestClient(alarmUrl);
+            var request = new RestRequest(Method.POST);
+
+            request.AddParameter("error", "1");
+            IRestResponse response = client.Execute(request);
+        }
+
+        private static void AlarmStop()
+        {
+            var client = new RestClient(alarmUrl);
+            var request = new RestRequest(Method.POST);
+
+            request.AddParameter("error", "0");
+            IRestResponse response = client.Execute(request);
+        }
     }
 }

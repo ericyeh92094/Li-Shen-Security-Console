@@ -13,6 +13,7 @@ namespace SecurityConsole
 {
     class SerialComm
     {
+        bool serial_exist;
         bool _continue;
         SerialPort _serialPort;
         Thread readThread = null;
@@ -21,6 +22,7 @@ namespace SecurityConsole
 
         public SerialComm()
         {
+            serial_exist = false;
             SetupSerial();
         }
 
@@ -68,7 +70,10 @@ namespace SecurityConsole
             string PortName = SerialPort.GetPortNames()[0]; // get the first free com port
             PortName = EnumPorts();
             if (PortName == "") // no port exist, abort the program
-                System.Environment.Exit(0);
+            {
+                //System.Environment.Exit(0);
+                return;
+            }
 
             _serialPort.PortName = PortName;
             _serialPort.BaudRate = 9600;
@@ -82,18 +87,24 @@ namespace SecurityConsole
             _serialPort.WriteTimeout = 5000;
 
             _serialPort.Open();
-            _continue = true;
+            _continue = serial_exist = true;
             readThread.Start();
         }
 
         public  void CloseSerial()
         {
-            readThread.Join();
-            _serialPort.Close();
+            if (serial_exist)
+            {
+                readThread.Join();
+                _serialPort.Close();
+            }
         }
 
         public  void SerialRead()
         {
+            if (!serial_exist)
+                return;
+
             while (_continue)
             {
                 try

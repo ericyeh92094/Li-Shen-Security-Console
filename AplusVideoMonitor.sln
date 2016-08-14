@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityConsole", "Sample\S
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AplusVideoOcx", "AplusVideoOcx\AplusVideoOcx.vdproj", "{9F086E22-69EF-4E7B-9B8D-7AF33F880D38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayAlarm", "PlayAlarm\PlayAlarm.csproj", "{A53E9BC1-2D16-47BD-837E-7541800D6565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,18 @@ Global
 		{9F086E22-69EF-4E7B-9B8D-7AF33F880D38}.Release|Any CPU.ActiveCfg = Release
 		{9F086E22-69EF-4E7B-9B8D-7AF33F880D38}.Release|Mixed Platforms.ActiveCfg = Release
 		{9F086E22-69EF-4E7B-9B8D-7AF33F880D38}.Release|x86.ActiveCfg = Release
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Debug|x86.Build.0 = Debug|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|x86.ActiveCfg = Release|Any CPU
+		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
