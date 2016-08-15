@@ -21,9 +21,9 @@ using RestSharp;
 namespace SecurityConsole
 {
     /// <summary>
-    /// Interaction logic for DeviceMonitor.xaml
+    /// Interaction logic for DeviceMonitorAdv.xaml
     /// </summary>
-    public partial class DeviceMonitor : Window
+    public partial class DeviceMonitorAdv : Window
     {
         //private IoTHubCommunicator _communicator;
         private SerialComm _serial_comm;
@@ -40,7 +40,7 @@ namespace SecurityConsole
 
         public System.Windows.Shapes.Path myPath { get; set; }
 
-        public DeviceMonitor()
+        public DeviceMonitorAdv()
         {
             InitializeComponent();
 
@@ -80,21 +80,31 @@ namespace SecurityConsole
         {
             try
             {
+                int col = 0, row = 0;
                 for (int i = 0; i < 4; i++)
                 {
                     System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
                     m_obj = new AplusVideoC01.wpf_Monitor();
-                    host.Width = (int) grid_main.ColumnDefinitions[1].ActualWidth;
-                    host.Height = (int)grid_main.RowDefinitions[0].ActualHeight + (int)grid_main.RowDefinitions[1].ActualHeight;
+                    host.Width = (int) grid_main.ColumnDefinitions[col].ActualWidth;
+                    host.Height = (int)grid_main.RowDefinitions[row].ActualHeight + (int)grid_main.RowDefinitions[row+1].ActualHeight;
+
+                    row = i / 2;
+                    row *= 2;
+
                     host.Child = m_obj;
-                    host.SetValue(Grid.RowProperty, i);
-                    host.SetValue(Grid.ColumnProperty, 1);
+                    host.SetValue(Grid.RowProperty, row);
+                    host.SetValue(Grid.ColumnProperty, col);
+
+                    col++; if (col == 2) col = 0;
+
                     grid_main.Children.Add(host);
                     m_obj.Device_Login(host_ip, host_port, "", "");
 
                     int id = i;
                     if (i == 0) id = 1;
-                    else if (i == 1) id = 0;
+                    if (i == 1) id = 0;
+                    if (i == 2) id = 3;
+                    if (i == 3) id = 2;
 
                     m_obj.Device_RealPlay(id, 0, 0);
                     m_objList.Add(m_obj);
@@ -107,25 +117,12 @@ namespace SecurityConsole
             }
         }
 
-        private void InitECG()
-        {
-            PathGeometry myPathGeometry = new PathGeometry();
-
-            var b = new Binding
-            {
-                Source = "M 0,50 L 200,50"
-            };
-            
-            BindingOperations.SetBinding(myPath, PathGeometry.FiguresProperty, b);
-        }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             InitButtonImage();
             InitVideoFeeds();
 
             /*
-            //InitECG();
-
             //((App)System.Windows.Application.Current).httpServer.MessageReceivedEvent += PanicButton1_PingReceivedEvent;
 
             //await _communicator.EnumDevices();
@@ -235,17 +232,6 @@ namespace SecurityConsole
 
         }
 
-        private void Ellipse_Loaded(object sender, RoutedEventArgs e)
-        {
-            Storyboard s = (Storyboard)this.Resources["SB0"];
-            if (sender == e1_1)
-                Storyboard.SetTargetName(s, "e1_1");
-            else if (sender == e3_1)
-                Storyboard.SetTargetName(s, "e3_1");
-            else if (sender == e4_1)
-                Storyboard.SetTargetName(s, "e4_1");
-            s.Begin();
-        }
 
         public void release_button(int id_num)
         {

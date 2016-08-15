@@ -154,8 +154,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DeviceMonitorAdv.xaml.cs">
+      <DependentUpon>DeviceMonitorAdv.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SerialComm.cs" />
     <Compile Include="SimpleHttpServer.cs" />
+    <Page Include="DeviceMonitorAdv.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DeviceMonitor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
