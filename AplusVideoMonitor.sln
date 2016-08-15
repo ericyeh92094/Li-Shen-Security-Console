@@ -11,6 +11,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AplusVideoOcx", "AplusVideo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayAlarm", "PlayAlarm\PlayAlarm.csproj", "{A53E9BC1-2D16-47BD-837E-7541800D6565}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlayAlarmSetup", "PlayAlarmSetup\PlayAlarmSetup.vdproj", "{62CF9A9A-CD17-42EE-887F-7570AB905820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,12 @@ Global
 		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|x86.ActiveCfg = Release|Any CPU
 		{A53E9BC1-2D16-47BD-837E-7541800D6565}.Release|x86.Build.0 = Release|Any CPU
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Debug|Any CPU.ActiveCfg = Debug
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Debug|x86.ActiveCfg = Debug
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Release|Any CPU.ActiveCfg = Release
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Release|Mixed Platforms.ActiveCfg = Release
+		{62CF9A9A-CD17-42EE-887F-7570AB905820}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
